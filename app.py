@@ -11,15 +11,13 @@ import torchvision.transforms as transforms
 from torchvision.models import resnet50, ResNet50_Weights
 from flask import request, jsonify
 from rapidfuzz import fuzz
-from flask import Flask, render_template, jsonify
-import json
-from wow import analyze_json
 
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # --- CONFIG ---
 DEVICE_NAME = "test"
 DEVICE_PATH = os.path.join("devices", DEVICE_NAME)
-OUTPUT_PATH = os.path.join(DEVICE_PATH, "output.json")
+OUTPUT_PATH = os.path.join(DEVICE_PATH, "yash.json")
 
 THREAT_CATEGORIES = {
     "Financial Fraud": ["bank details", "credit card", "cvv", "password"],
@@ -34,12 +32,11 @@ THREAT_CATEGORIES = {
 
 # --- INIT ---
 app = Flask(__name__)
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 model = resnet50(weights=ResNet50_Weights.DEFAULT)
 model.eval()
 
 search_results_cache = []
-flagged_entries = []
 
 LABELS = []
 with open("imagenet_classes.txt", "r") as f:
@@ -111,8 +108,15 @@ def analyze_file(path):
         entry["type"] = "pdf"
         try:
             doc = fitz.open(path)
-            text = "\n".join([page.get_text() for page in doc])
-            entry["content"] = text
+            text = ""
+            for page in doc:
+                page_text = page.get_text()
+                if not page_text.strip():
+                    pix = page.get_pixmap()
+                    img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                    page_text = pytesseract.image_to_string(img)
+                text += page_text + "\n"
+            entry["content"] = text.strip()
         except Exception as e:
             entry["content"] = f"Error: {e}"
 
@@ -133,7 +137,7 @@ def scan_directory(device_name):
     results = []
     for root, _, files in os.walk(directory):
         for file in files:
-            if file == "output.json":
+            if file == "yash.json":
                 continue
             full_path = os.path.join(root, file)
             results.append(analyze_file(full_path))
@@ -141,28 +145,28 @@ def scan_directory(device_name):
 
 def scan_threats(data):
     threats_found = False
+    flagged = []
 
     for entry in data:
         content = entry.get('content', '').lower()
-        tags = " ".join(entry.get('tags', [])).lower()  # <-- Include tags
-        combined_text = f"{content} {tags}"  # <-- Combine content + tags
+        tags = " ".join(entry.get('tags', [])).lower()
+        combined_text = f"{content} {tags}"
 
         matched_categories = []
 
         for category, keywords in THREAT_CATEGORIES.items():
             for keyword in keywords:
-                if re.search(rf"\b{re.escape(keyword)}\b", combined_text):  # <-- Scan combined text
+                if re.search(rf"\b{re.escape(keyword)}\b", combined_text):
                     matched_categories.append(category)
-                    break  # One keyword match is enough per category
+                    break
 
         if matched_categories:
             threats_found = True
             entry['threat_keywords'] = matched_categories
             entry['threat_class'] = matched_categories
-            flagged_entries.append(entry)
+            flagged.append(entry)
 
-    return threats_found, flagged_entries
-
+    return threats_found, flagged
 
 # --- ROUTES ---
 
@@ -185,7 +189,6 @@ def index():
 def about():
     return render_template("about.html")
 
-
 @app.route("/charts")
 def charts():
     return render_template("charts.html")
@@ -193,12 +196,11 @@ def charts():
 @app.route("/chart-data")
 def chart_data():
     try:
-        with open("devices/test/output.json", "r", encoding="utf-8") as f:
+        with open("devices/test/yash.json", "r", encoding="utf-8") as f:
             data = json.load(f)
     except Exception as e:
-        return jsonify({"error": f"Error reading output.json: {e}"}), 500
+        return jsonify({"error": f"Error reading yash.json: {e}"}), 500
 
-    # Reuse scanning function
     _, flagged_entries = scan_threats(data)
 
     category_count = {}
@@ -208,7 +210,6 @@ def chart_data():
 
     return jsonify(category_count)
 
-
 @app.route("/upload")
 def home():
     return render_template("home.html")
@@ -216,7 +217,6 @@ def home():
 @app.route("/results")
 def results():
     return render_template("results.html", results=search_results_cache)
-
 
 @app.route("/search")
 def search():
@@ -229,13 +229,12 @@ def search_keywords():
     keyword = data.get("keyword", "").strip().lower()
     file_type_filter = data.get("file_type", "all").lower()
 
-    # 🔒 Prevent empty search
     if not keyword:
         search_results_cache = []
         return jsonify({"results": []})
 
     try:
-        with open("devices/test/output.json", "r", encoding="utf-8") as f:
+        with open("devices/test/yash.json", "r", encoding="utf-8") as f:
             json_data = json.load(f)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -287,8 +286,5 @@ def search_keywords():
     search_results_cache = results
     return jsonify({"results": results})
 
-
-
-# --- MAIN ---
 if __name__ == "__main__":
     app.run(debug=True)
