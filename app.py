@@ -17,7 +17,7 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 # --- CONFIG ---
 DEVICE_NAME = "test"
 DEVICE_PATH = os.path.join("devices", DEVICE_NAME)
-OUTPUT_PATH = os.path.join(DEVICE_PATH, "yash.json")
+OUTPUT_PATH = os.path.join(DEVICE_PATH, "output.json")
 
 THREAT_CATEGORIES = {
     "Financial Fraud": ["bank details", "credit card", "cvv", "password"],
@@ -137,7 +137,7 @@ def scan_directory(device_name):
     results = []
     for root, _, files in os.walk(directory):
         for file in files:
-            if file == "yash.json":
+            if file == "output.json":
                 continue
             full_path = os.path.join(root, file)
             results.append(analyze_file(full_path))
@@ -196,10 +196,10 @@ def charts():
 @app.route("/chart-data")
 def chart_data():
     try:
-        with open("devices/test/yash.json", "r", encoding="utf-8") as f:
+        with open("devices/test/output.json", "r", encoding="utf-8") as f:
             data = json.load(f)
     except Exception as e:
-        return jsonify({"error": f"Error reading yash.json: {e}"}), 500
+        return jsonify({"error": f"Error reading output.json: {e}"}), 500
 
     _, flagged_entries = scan_threats(data)
 
@@ -234,7 +234,7 @@ def search_keywords():
         return jsonify({"results": []})
 
     try:
-        with open("devices/test/yash.json", "r", encoding="utf-8") as f:
+        with open("devices/test/output.json", "r", encoding="utf-8") as f:
             json_data = json.load(f)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
