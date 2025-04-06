@@ -154,6 +154,219 @@
     }
   },
   {
+    "path": "devices\\test\\vid1.mp4",
+    "type": "video",
+    "content": "Detected potential threats: sword in frame 25.",
+    "tags": [
+      "sword"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid1.mp4",
+    "type": "video",
+    "content": "Detected potential threats: sword in frame 75.",
+    "tags": [
+      "sword"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 0.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 25.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 50.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: cutlass in frame 75.",
+    "tags": [
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 100.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 125.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 150.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 175.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 200.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
+    "path": "devices\\test\\vid2.mp4",
+    "type": "video",
+    "content": "Detected potential threats: knife, cutlass in frame 225.",
+    "tags": [
+      "knife",
+      "cutlass"
+    ],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
     "path": "devices\\test\\WhatsApp Image 2025-04-06 at 03.01.46_ccf9aee8.jpg",
     "type": "image",
     "content": "Error: C:\\\\Program Files\\\\Tesseract-OCR\\\\tesseract.exe is not installed or it's not in your PATH. See README file for more information.",

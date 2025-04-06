@@ -11,8 +11,10 @@ import torchvision.transforms as transforms
 from torchvision.models import resnet50, ResNet50_Weights
 from flask import request, jsonify
 from rapidfuzz import fuzz
+import cv2
+from inference_sdk import InferenceHTTPClient
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
 # --- CONFIG ---
 DEVICE_NAME = "test"
@@ -32,7 +34,6 @@ THREAT_CATEGORIES = {
 
 # --- INIT ---
 app = Flask(__name__)
-pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 model = resnet50(weights=ResNet50_Weights.DEFAULT)
 model.eval()
 
@@ -47,20 +48,12 @@ transform = transforms.Compose([
     transforms.ToTensor(),
 ])
 
-# --- UTILITIES ---
-
-# Somewhere near the top of app.py
-import json
-from flask import render_template
-
-# Define this function so it's available anywhere
-def load_all_data():
-    with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    
-    threats_found, flagged_entries = scan_threats(data)
-    return flagged_entries  # return only what you need
-
+# Roboflow client setup
+CLIENT = InferenceHTTPClient(
+    api_url="https://detect.roboflow.com",
+    api_key="hY9qOmC03Dpg4JNVNeOp"
+)
+MODEL_ID = "weapon-jmeyk/1"
 
 def is_base64(s):
     try:
@@ -145,15 +138,70 @@ def analyze_file(path):
     entry["sensitive_info"] = detect_sensitive_data(entry["content"])
     return entry
 
+def analyze_video(video_path, frame_skip=25):
+    results = []
+    cap = cv2.VideoCapture(video_path)
+    frame_id = 0
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        if frame_id % frame_skip == 0:
+            frame_name = f"temp_frame_{frame_id}.jpg"
+            cv2.imwrite(frame_name, frame)
+
+            try:
+                result = CLIENT.infer(frame_name, model_id=MODEL_ID)
+
+                if result["predictions"]:
+                    detected_tags = list(set([pred["class"] for pred in result["predictions"]]))
+                    summary = f"Detected potential threats: {', '.join(detected_tags)} in frame {frame_id}."
+
+                    frame_entry = {
+                        "path": video_path,
+                        "type": "video",
+                        "content": summary,
+                        "tags": detected_tags,
+                        "sensitive_info": {
+                            "flags": [],
+                            "detected_entities": {
+                                "emails": [],
+                                "phones": [],
+                                "urls": [],
+                                "base64_strings": False
+                            }
+                        }
+                    }
+                    results.append(frame_entry)
+
+            except Exception as e:
+                print(f"Error in frame {frame_id}: {e}")
+
+            os.remove(frame_name)
+
+        frame_id += 1
+
+    cap.release()
+    return results
+
 def scan_directory(device_name):
     directory = os.path.join("devices", device_name)
     results = []
+
     for root, _, files in os.walk(directory):
         for file in files:
             if file == "output.json":
                 continue
             full_path = os.path.join(root, file)
-            results.append(analyze_file(full_path))
+
+            if file.lower().endswith(('.mp4', '.avi', '.mov', '.mkv')):
+                print(f"[Video] Analyzing: {file}")
+                results.extend(analyze_video(full_path))
+            else:
+                results.append(analyze_file(full_path))
+
     return results
 
 def scan_threats(data):
@@ -181,8 +229,13 @@ def scan_threats(data):
 
     return threats_found, flagged
 
-# --- ROUTES ---
+def load_all_data():
+    with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    threats_found, flagged_entries = scan_threats(data)
+    return flagged_entries
 
+# --- ROUTES ---
 @app.route("/")
 def index():
     print("[✓] Running analysis...")
@@ -248,7 +301,6 @@ def table():
         threats_found = False
 
     return render_template('table.html', data=filtered_data, threats_found=threats_found)
-
 
 @app.route("/search_keywords", methods=["POST"])
 def search_keywords():
