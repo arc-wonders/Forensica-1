@@ -90,6 +90,21 @@
     }
   },
   {
+    "path": "devices\\test\\random.txt",
+    "type": "file",
+    "content": "",
+    "tags": [],
+    "sensitive_info": {
+      "flags": [],
+      "detected_entities": {
+        "emails": [],
+        "phones": [],
+        "urls": [],
+        "base64_strings": false
+      }
+    }
+  },
+  {
     "path": "devices\\test\\terr_ppt.pdf",
     "type": "pdf",
     "content": "Error: C:\\\\Program Files\\\\Tesseract-OCR\\\\tesseract.exe is not installed or it's not in your PATH. See README file for more information.",
@@ -190,10 +205,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 0.",
+    "content": "Detected potential threats: knife, cutlass in frame 0.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -208,10 +223,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 25.",
+    "content": "Detected potential threats: knife, cutlass in frame 25.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -226,10 +241,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 50.",
+    "content": "Detected potential threats: knife, cutlass in frame 50.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -261,10 +276,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 100.",
+    "content": "Detected potential threats: knife, cutlass in frame 100.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -279,10 +294,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 125.",
+    "content": "Detected potential threats: knife, cutlass in frame 125.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -297,10 +312,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 150.",
+    "content": "Detected potential threats: knife, cutlass in frame 150.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -315,10 +330,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 175.",
+    "content": "Detected potential threats: knife, cutlass in frame 175.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -333,10 +348,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 200.",
+    "content": "Detected potential threats: knife, cutlass in frame 200.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
@@ -351,10 +366,10 @@
   {
     "path": "devices\\test\\vid2.mp4",
     "type": "video",
-    "content": "Detected potential threats: cutlass, knife in frame 225.",
+    "content": "Detected potential threats: knife, cutlass in frame 225.",
     "tags": [
-      "cutlass",
-      "knife"
+      "knife",
+      "cutlass"
     ],
     "sensitive_info": {
       "flags": [],
